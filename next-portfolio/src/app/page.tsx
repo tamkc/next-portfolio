@@ -9,6 +9,7 @@ import { Techstack } from "@/components/techstack";
 import LoadingVideo from "@/components/LoadingVideo";
 import { InView } from "@/components/ui/InView";
 import { Project } from "@/components/project";
+import Footer from "@/components/ui/Footer";
 
 // Utility function for simulating loading
 const simulateLoad = (duration: number) =>
@@ -25,15 +26,70 @@ export default function Page() {
   const currentSection = useRef(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
+  const images = [
+    "/say-hi.png",
+    "/icon-192x192.png", // Add more image paths if needed
+  ];
+
+  const techStackImages = [
+    "/logos/python.png",
+    "/logos/javascript.png",
+    "/logos/php.png",
+    "/logos/typescript.png",
+    "/logos/node.png",
+    "/logos/react.png",
+    "/logos/nextjs.png",
+    "/logos/vue.png",
+    "/logos/vite.png",
+    "/logos/postgres.png",
+    "/logos/mysql.png",
+    "/logos/amplify.png",
+    "/logos/ec2.png",
+    "/logos/googlecloud.png",
+    "/logos/docker.png",
+    "/logos/git.png",
+  ];
+
+  // Project images
+  const projectImages = [
+    "/projects/tigcase.jpg",
+    "/projects/im-dashboard.jpg",
+    "/projects/payroll.png",
+    "/projects/payroll-webapp.jpg",
+    "/projects/odoo-erp.png",
+    "/projects/vendorseek.png",
+  ];
+
+  // Combine all image paths
+  const imagesToPreload = [...images, ...techStackImages, ...projectImages];
+
   useEffect(() => {
     const loadAssets = async () => {
-      await simulateLoad(3000);
-      setIsLoading(false);
+      // Function to load a single image
+      const loadImage = (src: string): Promise<void> => {
+        return new Promise((resolve, reject) => {
+          const img = new Image(); // Explicitly typed as HTMLImageElement
+          img.src = src;
+          img.onload = () => resolve();
+          img.onerror = (err: any) => reject(err);
+        });
+      };
+
+      try {
+        // Preload all images
+        await Promise.all(imagesToPreload.map((image) => loadImage(image)));
+
+        await simulateLoad(3000);
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error loading assets:", error);
+        setIsLoading(false);
+      }
     };
 
     loadAssets();
 
-    // Cleanup function
     return () => {
       setIsLoading(false);
     };
@@ -42,7 +98,7 @@ export default function Page() {
   // Detect mobile view based on screen width
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust as per your breakpoint
+      setIsMobile(window.innerWidth <= 768);
     };
 
     handleResize(); // Initial check
@@ -62,9 +118,18 @@ export default function Page() {
 
   // Throttling scroll event for better UX on mobile
   let scrollTimeout: NodeJS.Timeout | null = null;
+  const scrollThreshold = 100; // Set a threshold for scroll sensitivity
+
   const handleScroll = (event: WheelEvent) => {
     // Only scroll if not on mobile or enough delay has passed
-    if (scrollTimeout) return; // Throttle scroll
+    if (scrollTimeout) {
+      return;
+    } // Throttle scroll
+
+    const scrollDistance = Math.abs(event.deltaY);
+    if (scrollDistance < scrollThreshold) {
+      return;
+    } // Ignore minor scrolls
 
     if (!isMobile) {
       if (event.deltaY > 0) {
@@ -76,11 +141,22 @@ export default function Page() {
 
     event.preventDefault(); // Prevent default scroll behavior
 
-    // Add a small delay to throttle scroll
+    // Add a longer delay to throttle scroll and prevent accidental section change
     scrollTimeout = setTimeout(() => {
       scrollTimeout = null;
-    }, 500);
+    }, 800);
   };
+
+  useEffect(() => {
+    // Only enable scroll for desktop views
+    if (!isMobile) {
+      window.addEventListener("wheel", handleScroll, { passive: false });
+    }
+
+    return () => {
+      window.removeEventListener("wheel", handleScroll);
+    };
+  }, [isMobile]);
 
   useEffect(() => {
     // Only enable scroll for desktop views
