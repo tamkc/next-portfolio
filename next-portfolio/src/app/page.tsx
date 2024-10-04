@@ -268,6 +268,7 @@ export default function Page() {
           </>
         )}
       </Wrapper>
+      <Footer/>
     </div>
   );
 }
