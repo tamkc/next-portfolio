@@ -1,7 +1,5 @@
 import { Card } from "@/components/ui/card";
-import Link from "next/link";
 import {
-  Link as LinkIcon,
   Instagram,
   Github,
   Linkedin,
