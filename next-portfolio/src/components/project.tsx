@@ -33,19 +33,6 @@ interface ProjectItemProps {
 }
 
 const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
-  const getRandomColor = () => {
-    const colors = [
-      "bg-red-500",
-      "bg-blue-500",
-      "bg-green-500",
-      "bg-yellow-500",
-      "bg-purple-500",
-      "bg-pink-500",
-      "bg-teal-500",
-      "bg-indigo-500",
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
   return (
     <Dialog>
       <DialogTrigger
@@ -121,7 +108,7 @@ const ProjectItem: React.FC<ProjectItemProps> = ({ project }) => {
                   <Badge
                     key={index}
                     variant="outline"
-                    className={`${getRandomColor()} text-white m-1 font-mono`}
+                    className={`text-black m-1 font-mono font-black border border-black`}
                   >
                     {tech}
                   </Badge>
@@ -294,7 +281,7 @@ export function Project() {
   );
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32">
+    <section className="w-full pt-12 md:pt-24 lg:pt-32">
       <div className="container grid gap-8 px-4 md:px-6">
         <div className="space-y-3 text-center">
           <motion.h2

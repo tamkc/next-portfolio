@@ -12,8 +12,7 @@ const Footer = () => {
           {/* Copyright and additional information */}
           <div className="text-center md:text-left pb-2 md:pb-0">
             <p className="text-lg">
-              &copy; {new Date().getFullYear()} Peter Tam's Portfolio. All rights
-              reserved.
+              &copy; {new Date().getFullYear()} Peter Tam's Portfolio.
             </p>
             <p className="text-lg text-gray-400">
               Built with Next.js and Tailwind CSS
@@ -23,21 +22,21 @@ const Footer = () => {
           {/* Social Media Links */}
           <div className="flex items-center justify-center space-x-6 md:space-x-8">
             <Link
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/kam-chuen-tam-24a8241b7/"
               aria-label="LinkedIn"
               className="hover:text-gray-300"
             >
               <Linkedin size={20} />
             </Link>
             <Link
-              href="https://github.com"
+              href="https://github.com/tamkc"
               aria-label="GitHub"
               className="hover:text-gray-300"
             >
               <Github size={20} />
             </Link>
             <Link
-              href="mailto:your-email@example.com"
+              href="mailto:tamkc1999@gmail.com"
               aria-label="Email"
               className="hover:text-gray-300"
             >

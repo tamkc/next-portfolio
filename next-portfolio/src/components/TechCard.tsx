@@ -16,9 +16,10 @@ const TechCard: React.FC<TechCardProps> = ({ title, imgSrc }) => {
           <Image
             src={imgSrc}
             alt={title}
-            layout="fill"
-            objectFit="contain"
+            fill
+            style={{ objectFit: "contain" }} // Using style for object fit
             className="absolute"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Adjust sizes based on your design
           />
         </div>
       </div>

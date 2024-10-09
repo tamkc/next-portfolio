@@ -16,7 +16,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Kam Chuen Tam's Playground",
+  title: "Kam Chuen Tam's Portfolio",
   description: "For Fun",
 };
 

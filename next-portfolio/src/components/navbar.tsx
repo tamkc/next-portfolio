@@ -3,12 +3,22 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+interface NavbarProps {
+  scrollToSection: (index: number) => void;
+}
 
-export function NavbarComponent() {
+export const Navbar: React.FC<NavbarProps> = ({ scrollToSection }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+  const handleLinkClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    sectionIndex: number
+  ) => {
+    event.preventDefault();
+    scrollToSection(sectionIndex);
   };
 
   return (
@@ -34,20 +44,30 @@ export function NavbarComponent() {
           <div className="hidden md:block w-full">
             <div className="flex justify-center items-baseline space-x-4">
               <Link
+                href="/#home"
+                className="px-3 py-2 rounded-md border-black hover:border text-lg font-medium hover:bg-gray-300"
+                onClick={(e) => handleLinkClick(e, 0)}
+              >
+                Home
+              </Link>
+              <Link
                 href="/#tech"
                 className="px-3 py-2 rounded-md border-black hover:border text-lg font-medium hover:bg-gray-300"
+                onClick={(e) => handleLinkClick(e, 1)}
               >
                 Tech Stack
               </Link>
               <Link
                 href="/#project"
                 className="px-3 py-2 rounded-md border-black hover:border text-lg font-medium hover:bg-gray-300"
+                onClick={(e) => handleLinkClick(e, 2)}
               >
                 Project
               </Link>
               <Link
                 href="/#contact"
                 className="px-3 py-2 rounded-md border-black hover:border text-lg font-medium hover:bg-gray-300"
+                onClick={(e) => handleLinkClick(e, 3)}
               >
                 contact
               </Link>
@@ -83,4 +103,4 @@ export function NavbarComponent() {
       </div>
     </nav>
   );
-}
+};

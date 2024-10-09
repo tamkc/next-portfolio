@@ -20,29 +20,31 @@ const techStacks = [
   { id: "15", title: "docker", imgSrc: "/logos/docker.png" },
   { id: "16", title: "git", imgSrc: "/logos/git.png" },
 ];
-export function Techstack() {
+export function TechStack() {
   return (
-    <div className="w-full z-0 container px-4 md:px-6 border border-gray-300 p-10 rounded-lg bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 shadow-xl">
-      <div className="flex flex-col items-center justify-center space-y-4 text-center">
-        <div className="space-y-2">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-            Check Out My Tech Stack!
-          </h2>
-          <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            I learn the latest and greatest technologies to build my projects.
-          </p>
+    <section className="py-12 md:py-24 lg:py-32">
+      <div className="w-full z-0 container px-4 md:px-6 border border-gray-300 p-10 rounded-lg bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 shadow-xl">
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+              Check Out My Tech Stack!
+            </h2>
+            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              I learn the latest and greatest technologies to build my projects.
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 mt-12">
+          {techStacks.map((tech) => (
+            <div
+              key={tech.id}
+              className="flex flex-col items-center justify-center space-y-2"
+            >
+              <TechCard title={tech.title} imgSrc={tech.imgSrc}  />
+            </div>
+          ))}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 mt-12">
-        {techStacks.map((tech) => (
-          <div
-            key={tech.id}
-            className="flex flex-col items-center justify-center space-y-2"
-          >
-            <TechCard title={tech.title} imgSrc={tech.imgSrc} />
-          </div>
-        ))}
-      </div>
-    </div>
+    </section>
   );
 }

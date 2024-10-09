@@ -1,15 +1,19 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+// External libraries
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { NavbarComponent } from "@/components/navbar";
+
+// Absolute imports (from "@/components/")
+import { Navbar } from "@/components/navbar";
 import Wrapper from "@/components/Wrapper";
-import { Tweet } from "@/components/tweet";
-import { Techstack } from "@/components/techstack";
+import { Tweet } from "@/components/Tweet";
+import { TechStack } from "@/components/TechStack";
 import LoadingVideo from "@/components/LoadingVideo";
 import { InView } from "@/components/ui/InView";
-import { Project } from "@/components/project";
 import Footer from "@/components/ui/Footer";
+import { Project } from "@/components/Project";
+import GetInTouch from "@/components/GetInTouch";
 
 // Utility function for simulating loading
 const simulateLoad = (duration: number) =>
@@ -25,6 +29,7 @@ export default function Page() {
   const sectionsRef = useRef<(HTMLDivElement | null)[]>([]);
   const currentSection = useRef(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const images = [
     "/say-hi.png",
@@ -60,27 +65,21 @@ export default function Page() {
     "/projects/vendorseek.png",
   ];
 
-  // Combine all image paths
   const imagesToPreload = [...images, ...techStackImages, ...projectImages];
 
   useEffect(() => {
     const loadAssets = async () => {
-      // Function to load a single image
-      const loadImage = (src: string): Promise<void> => {
-        return new Promise((resolve, reject) => {
-          const img = new Image(); // Explicitly typed as HTMLImageElement
+      const loadImage = (src: string): Promise<void> =>
+        new Promise((resolve, reject) => {
+          const img = new window.Image(); // Use the global Image constructor
           img.src = src;
           img.onload = () => resolve();
           img.onerror = (err: any) => reject(err);
         });
-      };
 
       try {
-        // Preload all images
         await Promise.all(imagesToPreload.map((image) => loadImage(image)));
-
         await simulateLoad(3000);
-
         setIsLoading(false);
       } catch (error) {
         console.error("Error loading assets:", error);
@@ -89,21 +88,15 @@ export default function Page() {
     };
 
     loadAssets();
+  }, [imagesToPreload]);
 
-    return () => {
-      setIsLoading(false);
-    };
-  }, []);
-
-  // Detect mobile view based on screen width
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
 
-    handleResize(); // Initial check
+    handleResize();
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -112,72 +105,64 @@ export default function Page() {
   const scrollToSection = (index: number) => {
     if (index >= 0 && index < sectionsRef.current.length) {
       currentSection.current = index;
-      sectionsRef.current[index]?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  // Throttling scroll event for better UX on mobile
-  let scrollTimeout: NodeJS.Timeout | null = null;
-  const scrollThreshold = 100; // Set a threshold for scroll sensitivity
-
-  const handleScroll = (event: WheelEvent) => {
-    // Only scroll if not on mobile or enough delay has passed
-    if (scrollTimeout) {
-      return;
-    } // Throttle scroll
-
-    const scrollDistance = Math.abs(event.deltaY);
-    if (scrollDistance < scrollThreshold) {
-      return;
-    } // Ignore minor scrolls
-
-    if (!isMobile) {
-      if (event.deltaY > 0) {
-        scrollToSection(currentSection.current + 1);
-      } else {
-        scrollToSection(currentSection.current - 1);
+      const section = sectionsRef.current[index];
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
       }
     }
-
-    event.preventDefault(); // Prevent default scroll behavior
-
-    // Add a longer delay to throttle scroll and prevent accidental section change
-    scrollTimeout = setTimeout(() => {
-      scrollTimeout = null;
-    }, 800);
   };
 
+  const handleScroll = useCallback(
+    (event: WheelEvent) => {
+      if (scrollTimeout.current) {
+        return; // Prevent rapid firing
+      }
+
+      const scrollDistance = Math.abs(event.deltaY);
+      if (scrollDistance < 40) {
+        return; // Ignore small scrolls
+      }
+
+      event.preventDefault();
+
+      if (!isMobile) {
+        if (event.deltaY > 0) {
+          scrollToSection(currentSection.current + 1);
+        } else {
+          scrollToSection(currentSection.current - 1);
+        }
+      }
+
+      scrollTimeout.current = setTimeout(() => {
+        scrollTimeout.current = null; // Clear the timeout after scrolling
+      }, 600);
+    },
+    [isMobile]
+  );
+
   useEffect(() => {
-    // Only enable scroll for desktop views
     if (!isMobile) {
       window.addEventListener("wheel", handleScroll, { passive: false });
     }
 
     return () => {
       window.removeEventListener("wheel", handleScroll);
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
+      }
     };
-  }, [isMobile]);
-
-  useEffect(() => {
-    // Only enable scroll for desktop views
-    if (!isMobile) {
-      window.addEventListener("wheel", handleScroll, { passive: false });
-    }
-
-    return () => {
-      window.removeEventListener("wheel", handleScroll);
-    };
-  }, [isMobile]);
+  }, [handleScroll, isMobile]);
 
   return (
     <div className="relative min-h-screen bg-gray-100 scroll-smooth">
-      <NavbarComponent />
+      <Navbar scrollToSection={scrollToSection}/>
       <Wrapper className="pb-24 sm:pb-32 lg:gap-x-0 xl:gap-x-8">
         {isLoading ? (
           <LoadingVideo />
         ) : (
           <>
             <div
+              id="home"
               ref={(el) => {
                 sectionsRef.current[0] = el;
               }}
@@ -201,51 +186,50 @@ export default function Page() {
               </InView>
             </div>
 
-            <div>
-              <InView
-                variants={{
-                  hidden: {
-                    opacity: 0,
-                    y: 90,
-                    x: 50,
-                    scale: 0.95,
-                    filter: "blur(4px)",
-                  },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    x: 0,
-                    scale: 1,
-                    filter: "blur(0px)",
-                  },
-                }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                viewOptions={{ margin: "-500px 0px 0px 0px" }}
-              >
-                <div className="relative w-auto h-80 mb-4 flex items-center justify-center">
-                  <Image
-                    src="/say-hi.png"
-                    alt="Illustration of a waving figure saying hi"
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                  <div
-                    id="tech"
-                    ref={(el) => {
-                      sectionsRef.current[1] = el;
-                    }}
-                    className="section"
-                  ></div>
-                </div>
-              </InView>
-            </div>
-
+            <InView
+              variants={{
+                hidden: {
+                  opacity: 0,
+                  y: 90,
+                  x: 50,
+                  scale: 0.95,
+                  filter: "blur(4px)",
+                },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  x: 0,
+                  scale: 1,
+                  filter: "blur(0px)",
+                },
+              }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              viewOptions={{ margin: "-500px 0px 0px 0px" }}
+            >
+              <div className="relative w-auto h-80 mb-4 flex items-center justify-center">
+                <Image
+                  src="/say-hi.png"
+                  alt="Illustration of a waving figure saying hi"
+                  fill
+                  style={{ objectFit: "contain" }} // Use style for objectFit
+                  className="your-class-name" // Add any necessary classes
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Adjust sizes based on your layout
+                />
+              </div>
+            </InView>
+            <div
+              id="tech"
+              ref={(el) => {
+                sectionsRef.current[1] = el;
+              }}
+              className="section"
+            />
             <InView
               variants={inViewDefaultVariants}
               transition={{ duration: 0.5, ease: "easeInOut" }}
               viewOptions={{ margin: "-400px 0px -400px 0px" }}
             >
-              <Techstack />
+              <TechStack />
             </InView>
 
             <div
@@ -254,9 +238,7 @@ export default function Page() {
                 sectionsRef.current[2] = el;
               }}
               className="section"
-            ></div>
-
-            <div>
+            >
               <InView
                 variants={inViewDefaultVariants}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -265,10 +247,26 @@ export default function Page() {
                 <Project />
               </InView>
             </div>
+            {/* Add InView for the GetInTouch section */}
+            <InView
+              variants={inViewDefaultVariants}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              viewOptions={{ margin: "-400px 0px -400px 0px" }}
+            >
+              <div
+                id="contact"
+                ref={(el) => {
+                  sectionsRef.current[3] = el;
+                }}
+                className="section"
+              >
+                <GetInTouch />
+              </div>
+            </InView>
           </>
         )}
       </Wrapper>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

@@ -33,7 +33,7 @@ export function Tweet({
   content,
 }: Readonly<TweetProps>) {
   const [typedContent, setTypedContent] = useState(""); // For typing effect
-  const typingSpeed = 80;
+  const typingSpeed = 50;
   const [isLiked, setIsLiked] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertContent, setAlertContent] = useState("");
