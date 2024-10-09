@@ -18,6 +18,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { AlertDescription } from "@/components/ui/alert";
+import Image from "next/image";
 
 interface TweetProps {
   username: string;
@@ -153,7 +154,7 @@ export function Tweet({
       <div className="flex justify-between items-center px-6 py-4">
         <div className="flex space-x-4">
           <div>
-            <img
+            <Image
               alt="Profile"
               className="rounded-full border border-black "
               height="48"
