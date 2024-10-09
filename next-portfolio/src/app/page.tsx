@@ -1,7 +1,13 @@
 "use client";
 
 // External libraries
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+} from "react";
 import Image from "next/image";
 
 // Absolute imports (from "@/components/")
@@ -31,50 +37,56 @@ export default function Page() {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const images = [
-    "/say-hi.png",
-    "/icon-192x192.png", // Add more image paths if needed
-  ];
+  // Preloadable images
+  const images = useMemo(() => ["/say-hi.png", "/icon-192x192.png"], []);
 
-  const techStackImages = [
-    "/logos/python.png",
-    "/logos/javascript.png",
-    "/logos/php.png",
-    "/logos/typescript.png",
-    "/logos/node.png",
-    "/logos/react.png",
-    "/logos/nextjs.png",
-    "/logos/vue.png",
-    "/logos/vite.png",
-    "/logos/postgres.png",
-    "/logos/mysql.png",
-    "/logos/amplify.png",
-    "/logos/ec2.png",
-    "/logos/googlecloud.png",
-    "/logos/docker.png",
-    "/logos/git.png",
-  ];
+  const techStackImages = useMemo(
+    () => [
+      "/logos/python.png",
+      "/logos/javascript.png",
+      "/logos/php.png",
+      "/logos/typescript.png",
+      "/logos/node.png",
+      "/logos/react.png",
+      "/logos/nextjs.png",
+      "/logos/vue.png",
+      "/logos/vite.png",
+      "/logos/postgres.png",
+      "/logos/mysql.png",
+      "/logos/amplify.png",
+      "/logos/ec2.png",
+      "/logos/googlecloud.png",
+      "/logos/docker.png",
+      "/logos/git.png",
+    ],
+    []
+  );
 
-  // Project images
-  const projectImages = [
-    "/projects/tigcase.jpg",
-    "/projects/im-dashboard.jpg",
-    "/projects/payroll.png",
-    "/projects/payroll-webapp.jpg",
-    "/projects/odoo-erp.png",
-    "/projects/vendorseek.png",
-  ];
+  const projectImages = useMemo(
+    () => [
+      "/projects/tigcase.jpg",
+      "/projects/im-dashboard.jpg",
+      "/projects/payroll.png",
+      "/projects/payroll-webapp.jpg",
+      "/projects/odoo-erp.png",
+      "/projects/vendorseek.png",
+    ],
+    []
+  );
 
-  const imagesToPreload = [...images, ...techStackImages, ...projectImages];
+  const imagesToPreload = useMemo(
+    () => [...images, ...techStackImages, ...projectImages],
+    [images, techStackImages, projectImages]
+  );
 
   useEffect(() => {
     const loadAssets = async () => {
       const loadImage = (src: string): Promise<void> =>
         new Promise((resolve, reject) => {
-          const img = new window.Image(); // Use the global Image constructor
+          const img = new window.Image();
           img.src = src;
           img.onload = () => resolve();
-          img.onerror = (err: any) => reject(err);
+          img.onerror = (err: string | Event) => reject(err); // Use a more general type
         });
 
       try {
@@ -155,7 +167,7 @@ export default function Page() {
 
   return (
     <div className="relative min-h-screen bg-gray-100 scroll-smooth">
-      <Navbar scrollToSection={scrollToSection}/>
+      <Navbar scrollToSection={scrollToSection} />
       <Wrapper className="pb-24 sm:pb-32 lg:gap-x-0 xl:gap-x-8">
         {isLoading ? (
           <LoadingVideo />

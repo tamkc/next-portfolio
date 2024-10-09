@@ -12,7 +12,7 @@ const Footer = () => {
           {/* Copyright and additional information */}
           <div className="text-center md:text-left pb-2 md:pb-0">
             <p className="text-lg">
-              &copy; {new Date().getFullYear()} Peter Tam's Portfolio.
+              &copy; {new Date().getFullYear()} Peter Tam&apos;s Portfolio.
             </p>
             <p className="text-lg text-gray-400">
               Built with Next.js and Tailwind CSS
