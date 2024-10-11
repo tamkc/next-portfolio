@@ -168,10 +168,10 @@ export default function Page() {
   return (
     <div className="relative min-h-screen bg-gray-100 scroll-smooth">
       <Navbar scrollToSection={scrollToSection} />
-      <Wrapper className="pb-24 sm:pb-32 lg:gap-x-0 xl:gap-x-8">
-        {isLoading ? (
-          <LoadingVideo />
-        ) : (
+      {isLoading ? (
+        <LoadingVideo />
+      ) : (
+        <Wrapper className="pb-24 sm:pb-32 lg:gap-x-0 xl:gap-x-8">
           <>
             <div
               id="home"
@@ -276,8 +276,8 @@ export default function Page() {
               </div>
             </InView>
           </>
-        )}
-      </Wrapper>
+        </Wrapper>
+      )}
       <Footer />
     </div>
   );
