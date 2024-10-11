@@ -147,7 +147,7 @@ export default function Page() {
 
       scrollTimeout.current = setTimeout(() => {
         scrollTimeout.current = null; // Clear the timeout after scrolling
-      }, 600);
+      }, 300);
     },
     [isMobile]
   );
@@ -167,12 +167,13 @@ export default function Page() {
 
   return (
     <div className="relative min-h-screen bg-gray-100 scroll-smooth">
-      <Navbar scrollToSection={scrollToSection} />
       {isLoading ? (
         <LoadingVideo />
       ) : (
         <Wrapper className="pb-24 sm:pb-32 lg:gap-x-0 xl:gap-x-8">
           <>
+            <Navbar scrollToSection={scrollToSection} />
+
             <div
               id="home"
               ref={(el) => {

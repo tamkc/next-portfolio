@@ -219,7 +219,9 @@ function DialogContainer({ children }: DialogContainerProps) {
     return () => setMounted(false);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return null;
+  }
 
   return createPortal(
     <AnimatePresence initial={false} mode="sync">
@@ -227,7 +229,7 @@ function DialogContainer({ children }: DialogContainerProps) {
         <>
           <motion.div
             key={`backdrop-${uniqueId}`}
-            className="fixed inset-0 h-full w-full bg-white/40 backdrop-blur-sm dark:bg-black/40"
+            className="fixed inset-0 h-full w-full bg-white/40 backdrop-blur-lg dark:bg-black/40"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -366,13 +368,16 @@ function DialogClose({ children, className, variants }: DialogCloseProps) {
       type="button"
       aria-label="Close dialog"
       key={`dialog-close-${uniqueId}`}
-      className={cn("absolute right-6 top-6", className)}
+      className={cn(
+        "absolute right-4 top-4 flex items-center justify-center p-1 text-black hover:text-gray-700 focus:outline-none ",
+        className
+      )}
       initial="initial"
       animate="animate"
       exit="exit"
       variants={variants}
     >
-      {children || <XIcon size={24} />}
+      {children || <XIcon size={20} />}
     </motion.button>
   );
 }
