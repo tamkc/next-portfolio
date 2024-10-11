@@ -12,9 +12,17 @@ import PopoverForm from "@/components/PopoverForm";
 
 export default function GetInTouch() {
   const socialMedia = [
-    { name: "LinkedIn", url: "https://linkedin.com", icon: Linkedin },
-    { name: "GitHub", url: "https://github.com", icon: Github },
-    { name: "Instagram", url: "https://github.com", icon: Instagram },
+    {
+      name: "LinkedIn",
+      url: "https://www.linkedin.com/in/kam-chuen-tam-24a8241b7/",
+      icon: Linkedin,
+    },
+    { name: "GitHub", url: "https://github.com/tamkc", icon: Github },
+    {
+      name: "Instagram",
+      url: "https://www.instagram.com/chuentam_99/",
+      icon: Instagram,
+    },
   ];
 
   return (
