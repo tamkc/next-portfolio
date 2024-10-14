@@ -59,6 +59,7 @@ export default function PopoverForm() {
         throw new Error("Failed to submit the form");
       }
     } catch (error) {
+      console.error("Error submitting form", error);
     }
     closeMenu();
   };
