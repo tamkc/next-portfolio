@@ -253,8 +253,7 @@ export function Project() {
         description: "A modern and intuitive web application for your users.",
         imgSrc: "/projects/vendorseek.png",
         alt: "Project 6",
-        liveDemoUrl:
-          "The Vendor Sourcing Platform originated from a concept developed by a fresh graduate UI/UX designer who approached me to help bring her vision to life. This collaborative project aims to provide a streamlined solution for sourcing vendors, showcasing a user-friendly interface and efficient functionality. Together, we are building this platform not only as a practical tool but also as a valuable addition to her portfolio. This project reflects our commitment to innovation and effective design in creating an engaging user experience.",
+        liveDemoUrl:"",
         comingSoon: true,
         content:
           "This project utilizes a modern tech stack including Next.js for server-side rendering, React for building user interfaces, Tailwind CSS for styling, and Framer Motion for animations. It also integrates Prisma for database management and Stripe for payment processing, all deployed on Vercel.",
