@@ -44,9 +44,23 @@ export default function PopoverForm() {
   const { control, handleSubmit } = methods; // Destructure control from methods
 
   const onSubmit = async (data: FieldValues) => {
-    // Handle form submission
-    console.log(data);
-    closeMenu(); // Close the form after submission
+    const formspreeEndpoint = "https://formspree.io/f/xkgnnjdv";
+
+    try {
+      const response = await fetch(formspreeEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit the form");
+      }
+    } catch (error) {
+    }
+    closeMenu();
   };
 
   const openMenu = () => {
