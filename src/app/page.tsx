@@ -170,8 +170,8 @@ export default function Page() {
       {isLoading ? (
         <LoadingVideo />
       ) : (
-        <Wrapper className="pb-24 sm:pb-32 lg:gap-x-0 xl:gap-x-8">
-          <>
+        <>
+          <Wrapper className="pb-24 sm:pb-32 lg:gap-x-0 xl:gap-x-8">
             <Navbar scrollToSection={scrollToSection} />
 
             <div
@@ -276,10 +276,10 @@ export default function Page() {
                 <GetInTouch />
               </div>
             </InView>
-          </>
-        </Wrapper>
+          </Wrapper>
+          <Footer />
+        </>
       )}
-      <Footer />
     </div>
   );
 }
